@@ -106,7 +106,7 @@ class TwoBit:
 
             self.index = index
 
-    def get_sequence_size(self, seqName):
+    def get_reference_length(self, seqName):
         """
         Get the size of a sequence by its name.
 
