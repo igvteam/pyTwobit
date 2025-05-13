@@ -72,6 +72,10 @@ class TwoBitRemoteTest(unittest.TestCase):
         seq =  twobit.fetch("noSuchSequence", 0)
         self.assertIsNone(seq)
 
+        # Sequence length
+        size = twobit.get_sequence_size("chr1")
+        self.assertEqual(size, 248956422)
+
 
 
 

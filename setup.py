@@ -6,13 +6,13 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pyTwobit',
-    version='0.2.0',
+    version='0.3.0',
     description='A fast reader for local or remote UCSC twobit sequence files.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     license='MIT',
     author='Jim Robinson',
-    url='https://github.com/jrobinso/pyTwoBit',
+    url='https://github.com/jrobinso/pyTwobit',
     packages=['pytwobit'],
     package_data={'pytwobit': ['tests/foo.2bit']},
     install_requires=[
