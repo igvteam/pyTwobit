@@ -238,30 +238,24 @@ class TwoBit:
             genomicPosition = regionStart
             while genomicPosition < regionEnd:
                 # Check if the current position is masked
-                n = next((i for i, block in enumerate(maskBlocks) if block.end > genomicPosition), None)
-                if n is not None and n > 0:
-                    maskBlocks = maskBlocks[n:]
-
-                baseIsMasked = len(maskBlocks) > 0 and maskBlocks[0].start <= genomicPosition and maskBlocks[0].end > genomicPosition
+                maskBlocks = maskBlocks[
+                             next((i for i, block in enumerate(maskBlocks) if block.end > genomicPosition), 0):]
+                baseIsMasked = maskBlocks and maskBlocks[0].start <= genomicPosition < maskBlocks[0].end
 
                 # Process "N" blocks
-                if len(nBlocks) > 0 and genomicPosition >= nBlocks[0].start and genomicPosition < nBlocks[0].end:
-                    currentNBlock = nBlocks[0]
-                    nBlocks = nBlocks[1:]
+                if nBlocks and nBlocks[0].start <= genomicPosition < nBlocks[0].end:
+                    currentNBlock = nBlocks.pop(0)
                     n_count = min(currentNBlock.end, regionEnd) - genomicPosition
                     sequenceBases.extend(['N'] * n_count)
-                    genomicPosition += n_count
-                    genomicPosition = genomicPosition - 1
+                    genomicPosition += n_count - 1
                 else:
-                    bytePosition = math.floor(genomicPosition / 4) - baseBytesOffset
+                    bytePosition = (genomicPosition // 4) - baseBytesOffset
                     subPosition = genomicPosition % 4
                     byte = baseBytes[bytePosition]
-                    if baseIsMasked:
-                        sequenceBases.append(maskedByteTo4Bases[byte][subPosition])
-                    else:
-                        sequenceBases.append(byteTo4Bases[byte][subPosition])
+                    sequenceBases.append(
+                        maskedByteTo4Bases[byte][subPosition] if baseIsMasked else byteTo4Bases[byte][subPosition])
 
-                genomicPosition = genomicPosition + 1
+                genomicPosition += 1
 
             seqstring = ''.join(sequenceBases)
             return seqstring

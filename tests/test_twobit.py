@@ -47,6 +47,14 @@ class TwoBitLocalTest(unittest.TestCase):
         self.assertEqual(expectedSeq, seq)
 
 
+    def test_getSequence(self):
+        twobit = TwoBit(str((pathlib.Path(__file__).parent / "test.2bit").resolve()))
+        expectedSequence = "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNACTCTATCTATCTATCTATCTATCTTTTTCCCCCCGGGGGGagagagagactc"
+        seq = twobit.fetch("chr1", 5, 100)
+        self.assertEqual(expectedSequence, seq)
+
+
+
 class TwoBitRemoteTest(unittest.TestCase):
 
     def test_twobit_sequence(self):
@@ -73,7 +81,7 @@ class TwoBitRemoteTest(unittest.TestCase):
         self.assertIsNone(seq)
 
         # Sequence length
-        size = twobit.get_sequence_size("chr1")
+        size = twobit.get_reference_length("chr1")
         self.assertEqual(size, 248956422)
 
 
